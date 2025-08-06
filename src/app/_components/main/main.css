@@ -1,0 +1,233 @@
+.drift-animation {
+  animation: drift 30s ease-in-out infinite;
+}
+
+.drift-animation-reverse {
+  animation: drift 25s ease-in-out infinite reverse;
+}
+
+.bg-gradient-radial {
+  background: radial-gradient(circle, var(--tw-gradient-stops));
+}
+
+.group:hover {
+  transform: scale(1.05);
+}
+
+.blur-md {
+  filter: blur(12px);
+}
+
+.blur-lg {
+  filter: blur(16px);
+}
+
+.blur-xl {
+  filter: blur(24px);
+}
+
+.blur-sm {
+  filter: blur(4px);
+}
+
+.aspect-video {
+  aspect-ratio: 16 / 9;
+}
+
+.lg\:flex-\[2\] {
+  flex: 2 1 0%;
+}
+
+.border-l-\[16px\] {
+  border-left-width: 16px;
+}
+
+.border-t-\[12px\] {
+  border-top-width: 12px;
+}
+
+.border-b-\[12px\] {
+  border-bottom-width: 12px;
+}
+
+.border-l-cyan-400 {
+  border-left-color: rgb(34 211 238);
+}
+
+.border-t-transparent {
+  border-top-color: transparent;
+}
+
+.border-b-transparent {
+  border-bottom-color: transparent;
+}
+
+.group:hover img {
+  transform: scale(1.05);
+}
+
+.group:hover .group-hover\:scale-105 {
+  transform: scale(1.05);
+}
+
+.group:hover .group-hover\:scale-110 {
+  transform: scale(1.1);
+}
+
+.group:hover .group-hover\:opacity-40 {
+  opacity: 0.4;
+}
+
+.group:hover .group-hover\:opacity-60 {
+  opacity: 0.6;
+}
+
+.group:hover .group-hover\:opacity-100 {
+  opacity: 1;
+}
+
+.transition-transform {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.duration-500 {
+  transition-duration: 500ms;
+}
+
+.duration-300 {
+  transition-duration: 300ms;
+}
+
+.space-y-32 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 8rem;
+}
+
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+}
+
+.from-cyan-500\/5 {
+  --tw-gradient-from: rgb(6 182 212 / 0.05);
+  --tw-gradient-to: rgb(6 182 212 / 0);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.to-purple-500\/5 {
+  --tw-gradient-to: rgb(168 85 247 / 0.05);
+}
+
+.from-cyan-500\/10 {
+  --tw-gradient-from: rgb(6 182 212 / 0.1);
+  --tw-gradient-to: rgb(6 182 212 / 0);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.to-purple-500\/10 {
+  --tw-gradient-to: rgb(168 85 247 / 0.1);
+}
+
+.border-cyan-500\/20 {
+  border-color: rgb(6 182 212 / 0.2);
+}
+
+.border-cyan-500\/30 {
+  border-color: rgb(6 182 212 / 0.3);
+}
+
+.border-purple-500\/50 {
+  border-color: rgb(168 85 247 / 0.5);
+}
+
+.hover\:border-purple-500\/50:hover {
+  border-color: rgb(168 85 247 / 0.5);
+}
+
+.bg-slate-800\/30 {
+  background-color: rgb(30 41 59 / 0.3);
+}
+
+.bg-slate-800\/50 {
+  background-color: rgb(30 41 59 / 0.5);
+}
+
+.bg-slate-900\/80 {
+  background-color: rgb(15 23 42 / 0.8);
+}
+
+.text-cyan-300 {
+  color: rgb(103 232 249);
+}
+
+.text-cyan-400 {
+  color: rgb(34 211 238);
+}
+
+.text-purple-400 {
+  color: rgb(196 181 253);
+}
+
+.hover\:bg-cyan-500\/20:hover {
+  background-color: rgb(6 182 212 / 0.2);
+}
+
+.hover\:bg-purple-500\/20:hover {
+  background-color: rgb(168 85 247 / 0.2);
+}
+
+.hover\:border-cyan-400:hover {
+  border-color: rgb(34 211 238);
+}
+
+.hover\:border-purple-400:hover {
+  border-color: rgb(196 181 253);
+}
+
+.tracking-wider {
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 768px) {
+  .space-y-32 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 4rem;
+  }
+
+  .gap-16 {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .flex-wrap .gap-4 {
+    gap: 1rem;
+  }
+
+  .px-6 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .py-3 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+}
+
+
+.hover-float:hover {
+  animation: float 2s ease-in-out infinite;
+}
+
+button:focus,
+.cursor-pointer:focus {
+  outline: 2px solid rgb(34 211 238);
+  outline-offset: 2px;
+}
+
+.text-gray-300 {
+  color: rgb(209 213 219);
+}
+
+.text-gray-400 {
+  color: rgb(156 163 175);
+}
