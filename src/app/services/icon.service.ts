@@ -12,11 +12,7 @@ export interface TechIcon {
   readonly displayName?: string;
 }
 
-export type TechIconCategory =
-  | 'frontend'
-  | 'backend'
-  | 'database'
-  | 'cloud';
+export type TechIconCategory = 'frontend' | 'backend' | 'database' | 'tools';
 
 export interface IconLoadResult {
   readonly success: boolean;
@@ -25,7 +21,7 @@ export interface IconLoadResult {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class IconService implements OnDestroy {
   private readonly http = inject(HttpClient);
@@ -38,32 +34,97 @@ export class IconService implements OnDestroy {
   private readonly failedIconsSignal = signal<Set<string>>(new Set());
 
   private readonly techIconsConfig: ReadonlyArray<TechIcon> = [
+    // UI/Skill category icons
+    {
+      name: 'web',
+      fileName: 'web.svg',
+      category: 'frontend',
+      displayName: 'Web',
+    },
+    {
+      name: 'code',
+      fileName: 'code.svg',
+      category: 'backend',
+      displayName: 'Code',
+    },
+    {
+      name: 'database',
+      fileName: 'database.svg',
+      category: 'database',
+      displayName: 'Database',
+    },
+    {
+      name: 'tools',
+      fileName: 'tools.svg',
+      category: 'tools',
+      displayName: 'Tools',
+    },
+
     // Frontend Technologies
     { name: 'Angular', fileName: 'angular.svg', category: 'frontend' },
     { name: 'TypeScript', fileName: 'typescript.svg', category: 'frontend' },
     { name: 'JavaScript', fileName: 'javascript.svg', category: 'frontend' },
     { name: 'HTML5', fileName: 'html5.svg', category: 'frontend' },
     { name: 'CSS3', fileName: 'css3.svg', category: 'frontend' },
-    { name: 'Tailwind CSS', fileName: 'tailwind-css.svg', category: 'frontend', displayName: 'Tailwind CSS' },
+    {
+      name: 'Tailwind CSS',
+      fileName: 'tailwind-css.svg',
+      category: 'frontend',
+      displayName: 'Tailwind CSS',
+    },
 
     // Backend Technologies
-    { name: '.NET', fileName: 'dotnet.svg', category: 'backend', displayName: '.NET' },
-    { name: 'ASP.NET Core', fileName: 'aspnet-core.svg', category: 'backend', displayName: 'ASP.NET Core' },
-    { name: 'C#', fileName: 'csharp.svg', category: 'backend', displayName: 'C#' },
-    { name: 'Entity Framework', fileName: 'entity-framework.svg', category: 'backend' },
+    {
+      name: '.NET',
+      fileName: 'dotnet.svg',
+      category: 'backend',
+      displayName: '.NET',
+    },
+    {
+      name: 'ASP.NET Core',
+      fileName: 'aspnet-core.svg',
+      category: 'backend',
+      displayName: 'ASP.NET Core',
+    },
+    {
+      name: 'C#',
+      fileName: 'csharp.svg',
+      category: 'backend',
+      displayName: 'C#',
+    },
+    {
+      name: 'Entity Framework',
+      fileName: 'entity-framework.svg',
+      category: 'backend',
+    },
     { name: 'JWT', fileName: 'jwt.svg', category: 'backend' },
 
     // Database Technologies
     { name: 'PostgreSQL', fileName: 'postgresql.svg', category: 'database' },
     { name: 'MySQL', fileName: 'mysql.svg', category: 'database' },
-    { name: 'SQL Server', fileName: 'sql-server.svg', category: 'database', displayName: 'SQL Server' },
+    {
+      name: 'SQL Server',
+      fileName: 'sql-server.svg',
+      category: 'database',
+      displayName: 'SQL Server',
+    },
     { name: 'Firebase', fileName: 'firebase.svg', category: 'database' },
 
-    // Cloud & DevOps
-    { name: 'Git', fileName: 'git.svg', category: 'cloud' },
-    { name: 'Github', fileName: 'github.svg', category: 'cloud' },
-    { name: 'GitHub Actions', fileName: 'github-actions.svg', category: 'cloud', displayName: 'GitHub Actions' },
-    { name: 'CI/CD', fileName: 'cicd.svg', category: 'cloud', displayName: 'CI/CD' }
+    // Tools
+    { name: 'Git', fileName: 'git.svg', category: 'tools' },
+    { name: 'GitHub', fileName: 'github.svg', category: 'tools' },
+    {
+      name: 'GitHub Actions',
+      fileName: 'github-actions.svg',
+      category: 'tools',
+      displayName: 'GitHub Actions',
+    },
+    {
+      name: 'CI/CD',
+      fileName: 'cicd.svg',
+      category: 'tools',
+      displayName: 'CI/CD',
+    },
   ] as const;
 
   readonly availableIcons = computed(() => this.techIconsConfig);
@@ -86,23 +147,22 @@ export class IconService implements OnDestroy {
 
   preloadTechIcons(): void {
     this.unsubscribePreload();
-  
+
     this.preloadSubscription = this.preloadIcons(TECH_ICONS).subscribe({
-      next: () => {
-      },
+      next: () => {},
       error: (err) => {
         console.warn('Error preloading some technology icons:', err);
-      }
+      },
     });
   }
-  
+
   private unsubscribePreload(): void {
     if (this.preloadSubscription) {
       this.preloadSubscription.unsubscribe();
       this.preloadSubscription = null;
     }
   }
-  
+
   ngOnDestroy(): void {
     this.unsubscribePreload();
     this.clearCache();
@@ -117,7 +177,10 @@ export class IconService implements OnDestroy {
 
     const iconConfig = this.findIconConfig(normalizedName);
     if (!iconConfig) {
-      const errorResult = this.createErrorResult(`Icon '${iconName}' not found`);
+      console.warn(`IconService: Icon '${iconName}' not found in config`);
+      const errorResult = this.createErrorResult(
+        `Icon '${iconName}' not found`
+      );
       this.iconCache.set(normalizedName, of(errorResult));
       return of(errorResult);
     }
@@ -125,23 +188,33 @@ export class IconService implements OnDestroy {
     this.updateLoadingState(normalizedName, true);
 
     const iconPath = `/assets/icons/${iconConfig.fileName}`;
-    const iconObservable = this.http.get(iconPath, { responseType: 'text' }).pipe(
-      map((svgContent: string) => this.createSuccessResult(svgContent)),
-      catchError((error) => {
-        console.warn(`Failed to load icon '${iconName}':`, error);
-        return of(this.createErrorResult(`Failed to load icon: ${error.message}`));
-      }),
-      map((result) => {
-        this.updateLoadingState(normalizedName, false);
-        if (result.success) {
-          this.updateLoadedState(normalizedName, true);
-        } else {
-          this.updateFailedState(normalizedName, true);
-        }
-        return result;
-      }),
-      shareReplay(1)
-    );
+
+    const iconObservable = this.http
+      .get(iconPath, { responseType: 'text' })
+      .pipe(
+        map((svgContent: string) => {
+          return this.createSuccessResult(svgContent);
+        }),
+        catchError((error) => {
+          console.warn(
+            `IconService: Failed to load icon '${iconName}' from '${iconPath}':`,
+            error
+          );
+          return of(
+            this.createErrorResult(`Failed to load icon: ${error.message}`)
+          );
+        }),
+        map((result) => {
+          this.updateLoadingState(normalizedName, false);
+          if (result.success) {
+            this.updateLoadedState(normalizedName, true);
+          } else {
+            this.updateFailedState(normalizedName, true);
+          }
+          return result;
+        }),
+        shareReplay(1)
+      );
 
     this.iconCache.set(normalizedName, iconObservable);
     return iconObservable;
@@ -152,9 +225,11 @@ export class IconService implements OnDestroy {
       return of([]);
     }
 
-    const loadObservables = iconNames.map(name =>
+    const loadObservables = iconNames.map((name) =>
       this.loadIcon(name).pipe(
-        catchError(() => of(this.createErrorResult(`Failed to preload ${name}`)))
+        catchError(() =>
+          of(this.createErrorResult(`Failed to preload ${name}`))
+        )
       )
     );
 
@@ -185,16 +260,16 @@ export class IconService implements OnDestroy {
   }
 
   private findIconConfig(normalizedName: string): TechIcon | undefined {
-    return this.techIconsConfig.find(config =>
-      config.name === normalizedName ||
-      config.displayName === normalizedName
+    return this.techIconsConfig.find(
+      (config) =>
+        config.name === normalizedName || config.displayName === normalizedName
     );
   }
 
   private createSuccessResult(svgContent: string): IconLoadResult {
     return {
       success: true,
-      content: this.sanitizer.bypassSecurityTrustHtml(svgContent)
+      content: this.sanitizer.bypassSecurityTrustHtml(svgContent),
     };
   }
 
@@ -209,24 +284,24 @@ export class IconService implements OnDestroy {
     return {
       success: false,
       content: this.sanitizer.bypassSecurityTrustHtml(fallbackSvg),
-      error
+      error,
     };
   }
 
   private updateSignalSet<T>(
-    signalFn: ReturnType<typeof signal<Set<T>>>, 
-    itemName: T, 
+    signalFn: ReturnType<typeof signal<Set<T>>>,
+    itemName: T,
     addItem: boolean
   ): void {
     const currentSet = signalFn();
     const newSet = new Set(currentSet);
-    
+
     if (addItem) {
       newSet.add(itemName);
     } else {
       newSet.delete(itemName);
     }
-    
+
     signalFn.set(newSet);
   }
 

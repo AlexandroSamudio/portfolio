@@ -28,6 +28,11 @@ interface StarfieldElement {
   animationOffset?: number;
 }
 
+interface NavigationItem {
+  id: 'about' | 'skills' | 'projects' | 'contact';
+  label: string;
+}
+
 interface SocialLink {
   icon: string;
   label: string;
@@ -92,7 +97,7 @@ export class Main implements OnInit, AfterViewInit, OnDestroy {
   public projects: Project[] = [];
   public skills: Skill[] = [];
   public socialLinks: SocialLink[] = [];
-  public navigationItems: string[] = [];
+  public navigationItems: NavigationItem[] = [];
   private readonly contactEmail = 'alex75221@gmail.com';
   private boundHandleResize = this.handleResize.bind(this);
 
@@ -105,6 +110,15 @@ export class Main implements OnInit, AfterViewInit, OnDestroy {
 
   currentYear = new Date().getFullYear();
   translations = translations;
+
+  typedText = '';
+  caretVisible = true;
+  private typingIsDeleting = false;
+  private typingWordIndex = 0;
+  private typingCharIndex = 0;
+  private typingIntervalId?: ReturnType<typeof setInterval>;
+  private caretIntervalId?: ReturnType<typeof setTimeout>;
+  private typingWords: string[] = [];
 
   @ViewChildren('projectVideo') projectVideos!: QueryList<
     ElementRef<HTMLVideoElement>
@@ -171,9 +185,9 @@ export class Main implements OnInit, AfterViewInit, OnDestroy {
       color: 'blue',
     },
     {
-      icon: 'cloud',
-      nameKey: 'skills.cloud.name',
-      descriptionKey: 'skills.cloud.description',
+      icon: 'tools',
+      nameKey: 'skills.tools.name',
+      descriptionKey: 'skills.tools.description',
       technologies: [
         ICON_NAMES.GITHUB,
         ICON_NAMES.GITHUB_ACTIONS,
@@ -217,6 +231,12 @@ export class Main implements OnInit, AfterViewInit, OnDestroy {
 
   setHoveredProjectIndex(index: number | null): void {
     this.hoveredProjectIndex = index;
+    try {
+      this.projectVideos?.forEach((v) => v.nativeElement.pause());
+    } catch (error) {
+      console.error('Error al pausar el video:', error);
+    }
+
     if (index !== null) {
       setTimeout(() => {
         const videoElement = this.projectVideos.toArray()[index]?.nativeElement;
@@ -240,9 +260,12 @@ export class Main implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private updateTextBasedProperties(): void {
-    this.navigationItems = ['about', 'skills', 'projects', 'contact'].map(
-      (item) => this.getText(`nav.${item}`)
-    );
+    this.navigationItems = [
+      { id: 'about', label: this.getText('nav.about') },
+      { id: 'skills', label: this.getText('nav.skills') },
+      { id: 'projects', label: this.getText('nav.projects') },
+      { id: 'contact', label: this.getText('nav.contact') },
+    ];
 
     this.socialLinks = this.socialLinksConfig.map((config) => ({
       icon: config.icon,
@@ -279,9 +302,10 @@ export class Main implements OnInit, AfterViewInit, OnDestroy {
         this.currentLanguage = savedLanguage;
       }
     } catch (error) {
-      console.warn('No se pudo accerder', error);
+      console.error(`No se pudo acceder a la configuración del idioma: ${error}`);
     }
     this.updateTextBasedProperties();
+    this.initTypingEffect();
   }
 
   ngAfterViewInit(): void {
@@ -297,6 +321,7 @@ export class Main implements OnInit, AfterViewInit, OnDestroy {
       cancelAnimationFrame(this.animationFrameId);
     }
     window.removeEventListener('resize', this.boundHandleResize);
+    this.stopTypingEffect();
   }
 
   private initCanvas(): void {
@@ -323,11 +348,13 @@ export class Main implements OnInit, AfterViewInit, OnDestroy {
     canvas.width = width * dpr;
     canvas.height = height * dpr;
 
+    this.canvasContext.setTransform(1, 0, 0, 1, 0, 0);
     this.canvasContext.scale(dpr, dpr);
   }
 
   private handleResize(): void {
     this.setCanvasDimensions();
+    this.generateStarfieldElements();
   }
 
   private generateStarfieldElements(): void {
@@ -571,31 +598,35 @@ export class Main implements OnInit, AfterViewInit, OnDestroy {
   }
 
   trackBySocialLink(index: number, link: SocialLink): string {
-    return link.label;
+    return link.href;
   }
 
   trackBySkill(index: number, skill: Skill): string {
-    return skill.name;
+    return skill.icon;
   }
 
-  trackByProject(index: number, project: Project): string {
-    return project.title;
+  trackByProject(project: Project): string {
+    return project.codeUrl || project.demoUrl || project.title;
   }
 
   onSocialLinkClick(link: SocialLink): void {
-    window.open(link.href, '_blank');
+    window.open(link.href, '_blank', 'noopener,noreferrer');
   }
 
-  onProjectAction(action: string, project: Project): void {
+  onProjectAction(action: 'code' | 'demo', project: Project): void {
     if (action === 'code' && project.codeUrl) {
-      window.open(project.codeUrl, '_blank');
+      window.open(project.codeUrl, '_blank', 'noopener,noreferrer');
     } else if (action === 'demo' && project.demoUrl) {
-      window.open(project.demoUrl, '_blank');
+      window.open(project.demoUrl, '_blank', 'noopener,noreferrer');
     } else {
       if (action === 'code') {
-        window.open('https://github.com/AlexandroSamudio', '_blank');
+        window.open(
+          'https://github.com/AlexandroSamudio',
+          '_blank',
+          'noopener,noreferrer'
+        );
       } else if (action === 'demo') {
-        console.log('Demo URL not available for this project');
+        console.warn('La URL no está disponible para este proyecto.');
       }
     }
   }
@@ -616,5 +647,77 @@ export class Main implements OnInit, AfterViewInit, OnDestroy {
     this.currentLanguage = this.currentLanguage === 'es' ? 'en' : 'es';
     localStorage.setItem('portfolio-language', this.currentLanguage);
     this.updateTextBasedProperties();
+    this.initTypingEffect();
+  }
+
+  private buildTypingWords(): void {
+    const keys = [
+      'typing.word1',
+      'typing.word2',
+      'typing.word3',
+      'typing.word4',
+      'typing.word5',
+    ];
+    this.typingWords = keys
+      .map((k) => this.getText(k))
+      .filter((w) => typeof w === 'string' && w.length > 0);
+    if (this.typingWords.length === 0) {
+      this.typingWords = [''];
+    }
+  }
+
+  private initTypingEffect(): void {
+    this.buildTypingWords();
+    this.stopTypingEffect();
+    this.typedText = '';
+    this.typingIsDeleting = false;
+    this.typingWordIndex = 0;
+    this.typingCharIndex = 0;
+    this.caretIntervalId = window.setInterval(() => {
+      this.caretVisible = !this.caretVisible;
+    }, 500);
+    this.scheduleNextType(200);
+  }
+
+  private scheduleNextType(delay: number): void {
+    this.typingIntervalId = window.setTimeout(() => this.tickType(), delay);
+  }
+
+  private tickType(): void {
+    const currentWord = this.typingWords[this.typingWordIndex] ?? '';
+    const full = currentWord;
+
+    if (!this.typingIsDeleting) {
+      this.typedText = full.substring(0, this.typingCharIndex + 1);
+      this.typingCharIndex = this.typedText.length;
+    } else {
+      this.typedText = full.substring(0, Math.max(0, this.typingCharIndex - 1));
+      this.typingCharIndex = this.typedText.length;
+    }
+
+    let delay = this.typingIsDeleting ? 60 : 100;
+
+    if (!this.typingIsDeleting && this.typedText === full) {
+      delay = 1200;
+      this.typingIsDeleting = true;
+    } else if (this.typingIsDeleting && this.typedText === '') {
+      this.typingIsDeleting = false;
+      this.typingWordIndex =
+        (this.typingWordIndex + 1) % this.typingWords.length;
+      delay = 400;
+    }
+
+    this.scheduleNextType(delay);
+  }
+
+  private stopTypingEffect(): void {
+    if (this.typingIntervalId !== undefined) {
+      clearTimeout(this.typingIntervalId);
+      this.typingIntervalId = undefined;
+    }
+    if (this.caretIntervalId !== undefined) {
+      clearInterval(this.caretIntervalId);
+      this.caretIntervalId = undefined;
+    }
   }
 }

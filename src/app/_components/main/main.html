@@ -117,37 +117,12 @@
                 >
                   <div class="flex items-center">
                     <span
-                      class="text-cyan-400 font-mono text-lg font-bold tracking-wider hover:text-purple-400 transition-colors duration-300"
+                      class="text-cyan-400 font-mono text-lg font-bold tracking-wider hover:text-purple-400 transition-colors duration-300 whitespace-nowrap"
                     >
-                      <span class="inline-block animate-pulse">A</span
-                      ><span
-                        class="inline-block animate-pulse"
-                        style="animation-delay: 0.1s"
-                        >L</span
-                      ><span
-                        class="inline-block animate-pulse"
-                        style="animation-delay: 0.2s"
-                        >E</span
-                      ><span
-                        class="inline-block animate-pulse"
-                        style="animation-delay: 0.3s"
-                        >X</span
-                      ><span
-                        class="text-purple-400 animate-pulse"
-                        style="animation-delay: 0.4s"
-                        >.</span
-                      ><span
-                        class="inline-block animate-pulse"
-                        style="animation-delay: 0.5s"
-                        >D</span
-                      ><span
-                        class="inline-block animate-pulse"
-                        style="animation-delay: 0.6s"
-                        >E</span
-                      ><span
-                        class="inline-block animate-pulse"
-                        style="animation-delay: 0.7s"
-                        >V</span
+                      {{ typedText }}<span
+                        class="inline-block w-[1ch] ml-0.5"
+                        [class.opacity-0]="!caretVisible"
+                        >|</span
                       >
                     </span>
                   </div>
@@ -160,12 +135,12 @@
             </div>
           </div>
           <div class="flex space-x-8">
+            @for (item of navigationItems; track item.id) {
             <a
-              *ngFor="let item of navigationItems"
-              (click)="scrollToSection(item.toLowerCase(), $event)"
+              (click)="scrollToSection(item.id, $event)"
               class="relative px-4 py-2 text-sm font-medium text-gray-300 hover:text-cyan-400 transition-all duration-300 group cursor-pointer"
             >
-              <span class="relative z-10">{{ item.toUpperCase() }}</span>
+              <span class="relative z-10">{{ item.label.toUpperCase() }}</span>
               <div
                 class="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               ></div>
@@ -173,6 +148,7 @@
                 class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-purple-400 group-hover:w-full transition-all duration-300"
               ></div>
             </a>
+            }
 
             <button
               (click)="toggleLanguage()"
@@ -204,14 +180,14 @@
       </div>
     </nav>
 
-    <section [id]="getText('nav.about')" class="pt-32 pb-20 px-6 relative z-10">
+    <section [id]="'about'" class="pt-32 pb-20 px-6 relative z-10">
       <div class="container mx-auto max-w-4xl text-center">
         <div class="mb-12">
           <div class="space-y-6">
             <h1
               class="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse"
             >
-              {{ getText('hero.title') }}
+              {{ getText('hero.name') }} {{ getText('hero.surname') }}
             </h1>
             <div class="flex items-center justify-center space-x-2 mb-6">
               <svg
@@ -241,7 +217,7 @@
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="2"
-                  d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"
+                  d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 0 1 2-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"
                 />
               </svg>
             </div>
@@ -255,8 +231,8 @@
           </div>
         </div>
         <div class="flex justify-center space-x-6 flex-wrap gap-4">
+          @for (item of socialLinks; track item) {
           <button
-            *ngFor="let item of socialLinks; let i = index; trackBy: trackBySocialLink"
             (click)="onSocialLinkClick(item)"
             [class]="'relative group bg-slate-800/50 border-2 border-' + item.color + '-500/50 text-' + item.color + '-400 hover:bg-' + item.color + '-500/20 hover:border-' + item.color + '-400 hover:text-white transition-all duration-300 backdrop-blur-sm font-mono px-6 py-3 rounded-lg text-sm font-medium cursor-pointer'"
           >
@@ -264,8 +240,8 @@
               [class]="'absolute inset-0 bg-gradient-to-r from-' + item.color + '-500/20 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300'"
             ></div>
 
+            @if (item.icon === 'github') {
             <svg
-              *ngIf="item.icon === 'github'"
               class="w-5 h-5 mr-2 relative z-10 inline"
               fill="currentColor"
               viewBox="0 0 24 24"
@@ -274,9 +250,8 @@
                 d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
               />
             </svg>
-
+            } @if (item.icon === 'linkedin') {
             <svg
-              *ngIf="item.icon === 'linkedin'"
               class="w-5 h-5 mr-2 relative z-10 inline"
               fill="currentColor"
               viewBox="0 0 24 24"
@@ -285,9 +260,8 @@
                 d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
               />
             </svg>
-
+            } @if (item.icon === 'PDF') {
             <svg
-              *ngIf="item.icon === 'PDF'"
               class="w-5 h-5 mr-2 relative z-10 inline"
               fill="currentColor"
               viewBox="0 0 1920 1920"
@@ -300,14 +274,16 @@
                 d="M791.057 1297.943c92.273-43.37 275.916-65.28 275.916-65.28-92.386-88.998-145.92-215.04-145.92-215.04-43.257 126.607-119.718 264.282-129.996 280.32"
               />
             </svg>
+            }
 
             <span class="relative z-10">{{ item.label }}</span>
           </button>
+          }
         </div>
       </div>
     </section>
 
-    <section [id]="getText('nav.skills')" class="py-22 px-6 relative z-10">
+    <section [id]="'skills'" class="py-22 px-6 relative z-10">
       <div class="container mx-auto max-w-6xl">
         <div class="text-center mb-16">
           <div class="relative inline-block">
@@ -326,8 +302,9 @@
         </div>
 
         <div class="space-y-8 max-w-4xl mx-auto">
+          @for (skill of skills; track trackBySkill($index, skill); let index =
+          $index) {
           <div
-            *ngFor="let skill of skills; let index = index; trackBy: trackBySkill"
             class="group relative skill-item"
             [style.animation-delay]="(index * 0.1) + 's'"
           >
@@ -364,229 +341,10 @@
                     <div
                       class="relative w-20 h-20 bg-slate-900/50 backdrop-blur-sm border-2 border-cyan-400/50 rounded-full flex items-center justify-center group-hover:border-purple-400/50 transition-colors duration-300"
                     >
-                      <ng-container [ngSwitch]="skill.icon">
-                        <svg
-                          *ngSwitchCase="'web'"
-                          class="w-12 h-12 text-cyan-400 group-hover:text-purple-400 transition-colors duration-300 group-hover:scale-110 transform"
-                          fill="currentColor"
-                          viewBox="0 0 100 100"
-                        >
-                          <rect
-                            x="10"
-                            y="20"
-                            width="80"
-                            height="60"
-                            rx="6"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="3"
-                          />
-
-                          <rect
-                            x="10"
-                            y="20"
-                            width="80"
-                            height="12"
-                            rx="6"
-                            fill="currentColor"
-                            opacity="0.3"
-                          />
-
-                          <circle cx="18" cy="26" r="1.5" fill="currentColor" />
-                          <circle cx="24" cy="26" r="1.5" fill="currentColor" />
-                          <circle cx="30" cy="26" r="1.5" fill="currentColor" />
-
-                          <path
-                            d="M25 40 L35 50 L25 60 M55 40 L45 50 L55 60"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2.5"
-                            stroke-linecap="round"
-                          />
-
-                          <text
-                            x="50"
-                            y="55"
-                            text-anchor="middle"
-                            font-family="monospace"
-                            font-size="8"
-                            fill="currentColor"
-                          >
-                            &lt;/&gt;
-                          </text>
-                        </svg>
-
-                        <svg
-                          *ngSwitchCase="'code'"
-                          class="w-12 h-12 text-cyan-400 group-hover:text-purple-400 transition-colors duration-300 group-hover:scale-110 transform"
-                          fill="currentColor"
-                          viewBox="0 0 100 100"
-                        >
-                          <rect
-                            x="20"
-                            y="15"
-                            width="60"
-                            height="70"
-                            rx="4"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="3"
-                          />
-
-                          <rect
-                            x="25"
-                            y="22"
-                            width="50"
-                            height="8"
-                            rx="2"
-                            fill="currentColor"
-                            opacity="0.6"
-                          />
-                          <rect
-                            x="25"
-                            y="35"
-                            width="50"
-                            height="8"
-                            rx="2"
-                            fill="currentColor"
-                            opacity="0.8"
-                          />
-                          <rect
-                            x="25"
-                            y="48"
-                            width="50"
-                            height="8"
-                            rx="2"
-                            fill="currentColor"
-                          />
-                          <rect
-                            x="25"
-                            y="61"
-                            width="50"
-                            height="8"
-                            rx="2"
-                            fill="currentColor"
-                            opacity="0.7"
-                          />
-
-                          <circle cx="72" cy="26" r="2" fill="#00ff00" />
-                          <circle cx="72" cy="39" r="2" fill="#00ff00" />
-                          <circle cx="72" cy="52" r="2" fill="#00ff00" />
-                          <circle cx="72" cy="65" r="2" fill="#00ff00" />
-                        </svg>
-
-                        <svg
-                          *ngSwitchCase="'database'"
-                          class="w-12 h-12 text-cyan-400 group-hover:text-purple-400 transition-colors duration-300 group-hover:scale-110 transform"
-                          fill="currentColor"
-                          viewBox="0 0 100 100"
-                        >
-                          <ellipse
-                            cx="50"
-                            cy="25"
-                            rx="25"
-                            ry="8"
-                            fill="currentColor"
-                            opacity="0.8"
-                          />
-                          <rect
-                            x="25"
-                            y="25"
-                            width="50"
-                            height="20"
-                            fill="currentColor"
-                            opacity="0.6"
-                          />
-                          <ellipse
-                            cx="50"
-                            cy="45"
-                            rx="25"
-                            ry="8"
-                            fill="currentColor"
-                            opacity="0.8"
-                          />
-                          <rect
-                            x="25"
-                            y="45"
-                            width="50"
-                            height="20"
-                            fill="currentColor"
-                            opacity="0.4"
-                          />
-                          <ellipse
-                            cx="50"
-                            cy="65"
-                            rx="25"
-                            ry="8"
-                            fill="currentColor"
-                          />
-
-                          <line
-                            x1="25"
-                            y1="25"
-                            x2="25"
-                            y2="65"
-                            stroke="currentColor"
-                            stroke-width="2"
-                          />
-                          <line
-                            x1="75"
-                            y1="25"
-                            x2="75"
-                            y2="65"
-                            stroke="currentColor"
-                            stroke-width="2"
-                          />
-                        </svg>
-
-                        <svg
-                          *ngSwitchCase="'cloud'"
-                          class="w-12 h-12 text-cyan-400 group-hover:text-purple-400 transition-colors duration-300 group-hover:scale-110 transform"
-                          fill="currentColor"
-                          viewBox="0 0 100 100"
-                        >
-                          <path
-                            d="M30 45 C20 45, 15 50, 15 55 C15 60, 20 65, 30 65 L70 65 C80 65, 85 60, 85 55 C85 50, 80 45, 70 45 C70 35, 60 25, 50 25 C40 25, 30 35, 30 45 Z"
-                            fill="currentColor"
-                          />
-
-                          <path
-                            d="M60 35 C65 35, 70 38, 70 42 C70 46, 65 49, 60 49 L45 49 C40 49, 35 46, 35 42 C35 38, 40 35, 45 35 C45 30, 50 25, 55 25 C60 25, 60 30, 60 35 Z"
-                            fill="currentColor"
-                            opacity="0.7"
-                          />
-
-                          <path
-                            d="M50 55 L50 75 M45 70 L50 75 L55 70"
-                            fill="none"
-                            stroke="white"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                          />
-                          <path
-                            d="M42 55 L42 50 M37 52 L42 47 L47 52"
-                            fill="none"
-                            stroke="white"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                          />
-                        </svg>
-
-                        <svg
-                          *ngSwitchDefault
-                          class="w-12 h-12 text-cyan-400 group-hover:text-purple-400 transition-colors duration-300 group-hover:scale-110 transform"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M13 10V3L4 14h7v7l9-11h-7z"
-                          ></path>
-                        </svg>
-                      </ng-container>
+                      <app-icon
+                        [name]="skill.icon"
+                        class="text-cyan-400 group-hover:text-purple-400 transition-colors duration-300 group-hover:scale-110 transform"
+                      ></app-icon>
                     </div>
                   </div>
                 </div>
@@ -608,13 +366,17 @@
                     ></div>
                     <div class="pl-6">
                       <div class="flex flex-wrap gap-2 mt-3">
+                        @for (tech of skill.technologies; track tech) {
                         <span
-                          *ngFor="let tech of skill.technologies"
                           class="inline-flex items-center px-2.5 py-1 text-sm font-mono bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-300 border border-cyan-500/30 rounded-full hover:from-cyan-500/30 hover:to-purple-500/30 hover:border-purple-500/40 transition-all duration-300"
                         >
-                          <app-icon [name]="tech" class="mr-1.5 text-cyan-400"></app-icon>
+                          <app-icon
+                            [name]="tech"
+                            class="mr-1.5 text-cyan-400"
+                          ></app-icon>
                           {{ tech }}
                         </span>
+                        }
                       </div>
                     </div>
                   </div>
@@ -622,11 +384,12 @@
               </div>
             </div>
           </div>
+          }
         </div>
       </div>
     </section>
 
-    <section [id]="getText('nav.projects')" class="py-22 px-6 relative z-10">
+    <section [id]="'projects'" class="py-22 px-6 relative z-10">
       <div class="container mx-auto max-w-7xl">
         <div class="text-center mb-20">
           <h2
@@ -639,8 +402,9 @@
           ></div>
         </div>
         <div class="space-y-32">
+          @for (project of projects; track trackByProject(project); let index =
+          $index) {
           <div
-            *ngFor="let project of projects; let index = index; trackBy: trackByProject"
             [class]="'flex flex-col ' + (index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse') + ' gap-16 items-center'"
           >
             <div class="flex-1 lg:flex-[2]">
@@ -729,10 +493,9 @@
                   {{ getText('projects.technologies') }}
                 </h4>
                 <div class="flex flex-wrap gap-3">
-                  <div
-                    *ngFor="let tech of project.technologies; let techIndex = index"
-                    class="relative group"
-                  >
+                  @for (tech of project.technologies; track tech; let techIndex
+                  = $index) {
+                  <div class="relative group">
                     <div
                       class="absolute inset-0 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-full blur-sm opacity-30 group-hover:opacity-60 transition-opacity duration-300"
                     ></div>
@@ -742,6 +505,7 @@
                       {{ tech }}
                     </span>
                   </div>
+                  }
                 </div>
               </div>
 
@@ -793,11 +557,12 @@
               </div>
             </div>
           </div>
+          }
         </div>
       </div>
     </section>
 
-    <section [id]="getText('nav.contact')" class="py-20 px-6 relative z-10">
+    <section [id]="'contact'" class="py-20 px-6 relative z-10">
       <div class="container mx-auto max-w-4xl text-center">
         <div
           class="p-12 bg-slate-800/30 backdrop-blur-sm border border-cyan-500/30 rounded-3xl relative overflow-hidden"
@@ -823,20 +588,11 @@
                 class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-400 rounded-lg blur-lg opacity-30 group-hover:opacity-60 transition-opacity duration-300"
               ></div>
               <div class="flex items-center relative z-10">
-                <svg
-                  class="w-6 h-6 mr-3"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  ></path>
-                </svg>
+                <img
+                  src="assets/icons/email.svg"
+                  alt="Contact"
+                  class="w-9 h-9 mr-3"
+                />
                 <span>{{ getText('contact.button') }}</span>
               </div>
             </button>

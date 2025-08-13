@@ -2,16 +2,16 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { injectSpeedInsights } from '@vercel/speed-insights';
 import { Meta, Title } from '@angular/platform-browser';
-import { inject as injectVercelAnalytics } from '@vercel/analytics';  
+import { inject as injectVercelAnalytics } from '@vercel/analytics';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
 export class App {
-  title = 'Alex.dev';
+  title = 'Alexandro Samudio | Portfolio';
   metaService = inject(Meta);
   titleService = inject(Title);
 
@@ -20,10 +20,13 @@ export class App {
     injectVercelAnalytics();
     this.titleService.setTitle(this.title);
 
-     this.metaService.addTag({
-      name: 'description',
-      content: 'Alex.dev - Mi portafolio personal, donde comparto mis proyectos, habilidades y experiencias en desarrollo web.'
-    });
+    this.metaService.updateTag(
+      {
+        name: 'description',
+        content:
+          'Alexandro Samudio - Mi portafolio personal, donde comparto mis proyectos, habilidades y experiencias en desarrollo web.',
+      },
+      "name='description'"
+    );
   }
-  
 }
