@@ -1,25 +1,25 @@
 export const ICON_NAMES = {
   // Frontend Technologies
   ANGULAR: 'Angular',
-  TYPESCRIPT: 'TypeScript', 
+  TYPESCRIPT: 'TypeScript',
   JAVASCRIPT: 'JavaScript',
   HTML5: 'HTML5',
   CSS3: 'CSS3',
   TAILWIND_CSS: 'Tailwind CSS',
-  
+
   // Backend Technologies
   DOTNET: '.NET',
   ASPNET_CORE: 'ASP.NET Core',
   CSHARP: 'C#',
   ENTITY_FRAMEWORK: 'Entity Framework',
   JWT: 'JWT',
-  
+
   // Database Technologies
   POSTGRESQL: 'PostgreSQL',
   MYSQL: 'MySQL',
   SQL_SERVER: 'SQL Server',
   FIREBASE: 'Firebase',
-  
+
   // Tools & DevOps
   GIT: 'Git',
   GITHUB: 'Github',
