@@ -170,12 +170,8 @@ export class IconService implements OnDestroy {
 
   loadIcon(iconName: string): Observable<IconLoadResult> {
     const normalizedName = this.normalizeIconName(iconName);
-    console.log(
-      `IconService: Loading icon '${iconName}' (normalized: '${normalizedName}')`
-    );
 
     if (this.iconCache.has(normalizedName)) {
-      console.log(`IconService: Icon '${normalizedName}' found in cache`);
       return this.iconCache.get(normalizedName)!;
     }
 
@@ -189,23 +185,14 @@ export class IconService implements OnDestroy {
       return of(errorResult);
     }
 
-    console.log(
-      `IconService: Found icon config for '${normalizedName}':`,
-      iconConfig
-    );
     this.updateLoadingState(normalizedName, true);
 
     const iconPath = `/assets/icons/${iconConfig.fileName}`;
-    console.log(`IconService: Fetching icon from path: ${iconPath}`);
 
     const iconObservable = this.http
       .get(iconPath, { responseType: 'text' })
       .pipe(
         map((svgContent: string) => {
-          console.log(
-            `IconService: Successfully loaded SVG content for '${normalizedName}'`,
-            svgContent.substring(0, 100) + '...'
-          );
           return this.createSuccessResult(svgContent);
         }),
         catchError((error) => {

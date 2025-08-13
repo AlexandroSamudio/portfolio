@@ -116,8 +116,8 @@ export class Main implements OnInit, AfterViewInit, OnDestroy {
   private typingIsDeleting = false;
   private typingWordIndex = 0;
   private typingCharIndex = 0;
-  private typingIntervalId?: number;
-  private caretIntervalId?: number;
+  private typingIntervalId?: ReturnType<typeof setInterval>;
+  private caretIntervalId?: ReturnType<typeof setTimeout>;
   private typingWords: string[] = [];
 
   @ViewChildren('projectVideo') projectVideos!: QueryList<
@@ -233,7 +233,9 @@ export class Main implements OnInit, AfterViewInit, OnDestroy {
     this.hoveredProjectIndex = index;
     try {
       this.projectVideos?.forEach((v) => v.nativeElement.pause());
-    } catch {}
+    } catch (error) {
+      console.error('Error al pausar el video:', error);
+    }
 
     if (index !== null) {
       setTimeout(() => {
@@ -300,7 +302,7 @@ export class Main implements OnInit, AfterViewInit, OnDestroy {
         this.currentLanguage = savedLanguage;
       }
     } catch (error) {
-      console.warn('No se pudo accerder', error);
+      alert(`No se pudo acceder a la configuración del idioma: ${error}`);
     }
     this.updateTextBasedProperties();
     this.initTypingEffect();
@@ -624,7 +626,7 @@ export class Main implements OnInit, AfterViewInit, OnDestroy {
           'noopener,noreferrer'
         );
       } else if (action === 'demo') {
-        console.warn('Demo URL not available for this project');
+        alert('La URL del no está disponible para este proyecto.');
       }
     }
   }
