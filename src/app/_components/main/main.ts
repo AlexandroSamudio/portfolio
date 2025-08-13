@@ -98,7 +98,7 @@ export class Main implements OnInit, AfterViewInit, OnDestroy {
   public skills: Skill[] = [];
   public socialLinks: SocialLink[] = [];
   public navigationItems: NavigationItem[] = [];
-  private readonly contactEmail = 'alex75221@gmail.com';
+  private readonly contactEmail = 'alexandrosamudio27@gmail.com';
   private boundHandleResize = this.handleResize.bind(this);
 
   @ViewChild('starfieldCanvas') starfieldCanvas!: ElementRef<HTMLCanvasElement>;
