@@ -302,7 +302,7 @@ export class Main implements OnInit, AfterViewInit, OnDestroy {
         this.currentLanguage = savedLanguage;
       }
     } catch (error) {
-      alert(`No se pudo acceder a la configuración del idioma: ${error}`);
+      console.error(`No se pudo acceder a la configuración del idioma: ${error}`);
     }
     this.updateTextBasedProperties();
     this.initTypingEffect();
@@ -626,7 +626,7 @@ export class Main implements OnInit, AfterViewInit, OnDestroy {
           'noopener,noreferrer'
         );
       } else if (action === 'demo') {
-        alert('La URL del no está disponible para este proyecto.');
+        console.warn('La URL no está disponible para este proyecto.');
       }
     }
   }

@@ -112,7 +112,7 @@ export class IconService implements OnDestroy {
 
     // Tools
     { name: 'Git', fileName: 'git.svg', category: 'tools' },
-    { name: 'Github', fileName: 'github.svg', category: 'tools' },
+    { name: 'GitHub', fileName: 'github.svg', category: 'tools' },
     {
       name: 'GitHub Actions',
       fileName: 'github-actions.svg',

@@ -22,7 +22,7 @@ export const ICON_NAMES = {
 
   // Tools & DevOps
   GIT: 'Git',
-  GITHUB: 'Github',
+  GITHUB: 'GitHub',
   GITHUB_ACTIONS: 'GitHub Actions',
   CICD: 'CI/CD'
 } as const;

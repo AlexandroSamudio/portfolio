@@ -15,7 +15,7 @@ export const TECH_ICONS: IconName[] = [
   'MySQL',
   'Firebase',
   'SQL Server',
-  'Github',
+  'GitHub',
   'GitHub Actions',
   'CI/CD',
   'Git',
