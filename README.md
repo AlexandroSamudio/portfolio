@@ -34,7 +34,7 @@ Bienvenido a mi portfolio de desarrollador. Este sitio web muestra mis proyectos
 
 1. **Clonar el repositorio**
    ```bash
-   git clone https://github.com/tuusuario/portfolio.git
+   git clone https://github.com/AlexandroSamudio/portfolio.git
    cd portfolio
    ```
 
@@ -43,9 +43,9 @@ Bienvenido a mi portfolio de desarrollador. Este sitio web muestra mis proyectos
    npm install
    ```
 
-3. **Ejecutar en modo desarrollo**
+3. **Ejecutar**
    ```bash
-   npm run dev
+   ng serve
    ```
 
 4. **Abrir en el navegador**
