@@ -1,59 +1,67 @@
-# PersonalPortfolio
+# 🌐 Portfolio Personal
+![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black)
+![License](https://img.shields.io/badge/License-MIT-blue)
+![Angular](https://img.shields.io/badge/Angular-DD0031?logo=angular&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.1.
+![portfolio](https://github.com/user-attachments/assets/c44a7d4d-2d95-4014-bade-0b8980ec432b)
 
-## Development server
+Bienvenido a mi portfolio de desarrollador. Este sitio web muestra mis proyectos y habilidades en desarrollo de software.
 
-To start a local development server, run:
+## 🚀 Link al sitio
 
-```bash
-ng serve
-```
+[Ver Portfolio](https://www.alexandrosamudio.dev)
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## ✨ Características Destacadas
 
-## Code scaffolding
+- 🎨 **Diseño Moderno**: Gradientes vibrantes y animaciones fluidas
+- ⚡ **Alta Performance**: Carga rápida y optimizada
+- 🌟 **Animaciones Suaves**: Transiciones y efectos visuales modernos
+- 🎯 **UX Intuitiva**: Navegación clara y accesible
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 🛠️ Tecnologías Utilizadas
 
-```bash
-ng generate component component-name
-```
+### Frontend
+- **Framework**: Angular, TypeScript
+- **Estilos**: HTML5, CSS3, TailwindCSS
+- **Librerías**: Simplebar
+- **Control de Versiones**: Git, GitHub
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Deployment
+- **Hosting**: Vercel
 
-```bash
-ng generate --help
-```
+## 🚦 Cómo Ejecutar Localmente
 
-## Building
+1. **Clonar el repositorio**
+   ```bash
+   git clone https://github.com/tuusuario/portfolio.git
+   cd portfolio
+   ```
 
-To build the project run:
+2. **Instalar dependencias**
+   ```bash
+   npm install
+   ```
 
-```bash
-ng build
-```
+3. **Ejecutar en modo desarrollo**
+   ```bash
+   npm run dev
+   ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+4. **Abrir en el navegador**
+   ```
+   http://localhost:3000
+   ```
 
-## Running unit tests
+## 📞 Contacto
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+- **Email**: alexandrosamudio27@gmail.com
+- **LinkedIn**: https://www.linkedin.com/in/alexandro-samudio-b40b76289/
 
-```bash
-ng test
-```
+## 📄 Licencia
 
-## Running end-to-end tests
+Este proyecto está bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para más detalles.
 
-For end-to-end (e2e) testing, run:
+---
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+⭐ Si te gusta este portfolio, ¡no olvides darle una estrella al repositorio!
