@@ -19,6 +19,8 @@
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
     "rxjs": "~7.8.0",
+    "simplebar": "^6.3.2",
+    "simplebar-angular": "^3.3.2",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },

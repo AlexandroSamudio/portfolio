@@ -1,16 +1,17 @@
-import { Component, inject } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { injectSpeedInsights } from '@vercel/speed-insights';
 import { Meta, Title } from '@angular/platform-browser';
 import { inject as injectVercelAnalytics } from '@vercel/analytics';
+import { SimplebarAngularModule } from 'simplebar-angular';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, SimplebarAngularModule],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App {
+export class App{
   title = 'Alexandro Samudio | Portfolio';
   metaService = inject(Meta);
   titleService = inject(Title);

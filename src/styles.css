@@ -1,14 +1,57 @@
+@import "simplebar/dist/simplebar.min.css";
 @import "tailwindcss";
 
-*{
-  font-family: 'Michroma', sans-serif;
+.simplebar-track {
+  background: transparent !important;
+}
+.simplebar-scrollbar {
+  background: linear-gradient(135deg, #22d3ee 40%, #a855f7 100%) !important;
+  border-radius: 8px;
+  width: 8px !important;
+  opacity: 0;
+  transition: opacity 0.4s;
 }
 
+.app-scroll.scrolling .simplebar-scrollbar,
+.app-scroll:hover .simplebar-scrollbar,
+.app-scroll:focus-within .simplebar-scrollbar {
+  opacity: 1;
+}
+.simplebar-scrollbar:before {
+  display: none;
+}
+.simplebar-track.simplebar-vertical {
+  width: 8px !important;
+}
+.simplebar-track.simplebar-horizontal {
+  height: 8px !important;
+}
+
+
+
+body {
+  background-clip: border-box;
+}
+
+html,
+body,
+app-root,
+.app-scroll {
+  height: 100%;
+}
+
+body {
+  overflow: hidden;
+}
+
+* {
+  font-family: "Michroma", sans-serif;
+}
 
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
 @keyframes moveStarsLeft {
@@ -21,7 +64,8 @@ body {
 }
 
 @keyframes twinkle {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.3;
     transform: scale(1);
   }
@@ -49,7 +93,8 @@ body {
 }
 
 @keyframes floatParticles {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px) rotate(0deg);
   }
   25% {
@@ -73,7 +118,8 @@ body {
 }
 
 @keyframes drift {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0px) translateY(0px);
   }
   25% {
@@ -88,7 +134,8 @@ body {
 }
 
 @keyframes starPulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.4;
   }
   50% {
@@ -97,7 +144,8 @@ body {
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
